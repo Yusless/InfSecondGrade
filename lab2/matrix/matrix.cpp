@@ -34,6 +34,8 @@ public:
 
     static Matrix generateWithDeterminant(unsigned n, T target_det) {    
         Matrix matrix(n, n);
+        // А если у типа T нет конструктора от int?
+        // В любом случае лучше писать static_cast<T>(1), так будет покрыто большее количество типов T
         T curr_det = T(1);
         
         for (int i = 0; i < n; i++) {
@@ -50,6 +52,9 @@ public:
         }
         T scale = (target_det / curr_det);
             matrix(0, 0) *= scale;
+        
+        // Этот код сильно напоминает прибавление одной строчки матрицы к другой с заданным коэффициентом
+        // Такое нужно дальше для расчета детерминанта, почему бы не сделать это отдельным методом, а затем переиспользовать?
         for (int i = 0; i < n*2; i++) {
             int row1 = rand() % n;
             int row2;
@@ -67,6 +72,7 @@ public:
 
     Matrix& transpose() {
         if (rows_ != cols_) {
+            // Да ладно?
             std::cout << "Транспонирование возможно только для квадратных матриц" << std::endl;
             return *this;
         }
@@ -89,6 +95,10 @@ public:
         }
         return result;
     }
+
+// Два метода traspose делают формально одно и тоже с одним исплючениием: один копирует, другой изменяет себя
+// Один из них можно оперделеить через другой, но нудно подумать
+
 void print() const {
     for (int i = 0; i < rows_; i++) {
         for (int j = 0; j < cols_; j++) {
@@ -97,7 +107,9 @@ void print() const {
         std::cout << std::endl;
     }
 }
+
 };
+
 template<typename T>
 T determinant(const Matrix<T>& matrix) {
     int n = matrix.rows();
@@ -108,9 +120,11 @@ T determinant(const Matrix<T>& matrix) {
     for (int i = 0; i < n; i++) {
         if (temp(i,i) == T(0)) {
             return T(0);
+            // Получается, что у матрицы [ [0, 1] [1, 0] ] нулевой детерминант?
         }
         det *= temp(i,i);
 
+        // И вот как раз тут можно было бы использовать метод с вычитанием строк
         for (int j = i +1; j < n; j++) {
             T lambda = temp(j,i)/temp(i,i);
             for (int k = i; k < n; k++) {
@@ -131,7 +145,7 @@ int main() {
     std::cout << "---------------------------" << std::endl;
 
     Matrix<double> m50 = Matrix<double>::generateWithDeterminant(50, 4.0);
-    m50.print();
+    m50.print(); // чето очень много цифр на экран вывалилось
     double det50 = determinant(m50);
     double det50transposed = determinant(m50.transpose());
     std::cout << det50 << std::endl;
