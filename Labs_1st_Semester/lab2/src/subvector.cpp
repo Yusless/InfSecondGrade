@@ -30,7 +30,7 @@ subvector& operator=(const subvector& other) {
 subvector(subvector&& other): mas(other.mas), capacity(other.capacity), top(other.top) {
     other.capacity = 0;
     other.top = 0;
-    other.mas = nullptr
+    other.mas = nullptr;
 }
 
 subvector& operator=(subvector&& other) {
