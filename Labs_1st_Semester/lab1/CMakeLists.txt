@@ -1,0 +1,12 @@
+add_executable(1_int_by_bits src/1.int_by_bits.cpp)
+add_executable(2_un_int_by_bits src/2.un_int_by_bits.cpp)
+add_executable(3_float_by_bits src/3.float_by_bits.cpp)
+add_executable(4_gap_between_nums src/4.gap_between_nums.cpp)
+add_executable(5_nonassociativity src/5.nonassociativity.cpp)
+add_executable(6_harmonic src/6.harmonic.cpp)
+add_executable(heap_sort src/heap_sort.cpp)
+add_executable(merge_sort src/merge_sort.cpp)
+add_executable(my_beloved_vector src/my_beloved_vector.cpp)
+
+target_link_libraries(heap_sort PRIVATE rt)
+target_link_libraries(merge_sort PRIVATE rt)
