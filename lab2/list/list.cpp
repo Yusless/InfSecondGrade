@@ -1,6 +1,7 @@
 template<typename T>
 
 class subforwardlist {
+// public поля?
     public:
     struct Node {
         T data;
@@ -23,6 +24,7 @@ class subforwardlist {
 }
 
     subforwardlist(const subforwardlist& other): begin(nullptr) { // copy constructor
+        // Тут можно и без двойных указателей обойтись
         if (other.begin != nullptr) {
             Node* other_curr = other.begin;
             Node** curr_ptr = &begin;
@@ -36,6 +38,9 @@ class subforwardlist {
 }
 
     subforwardlist& operator=(const subforwardlist& other) { // copy assignment constructor
+        // Не очень понятно, что тут происходит, потому что два одинаковых куска кода вложены 
+        // друг в друга под разными условиями в if 
+        // вообще для операторов присваивания есть идиома copy&swap, можно её посмотреть
         if (this != &other) {
             Node* other_curr = other.begin;
             Node** curr_ptr = &begin;
@@ -63,6 +68,7 @@ class subforwardlist {
         other.begin = nullptr;
     }
 
+    // Тут комментарий аналогично вектору
     subforwardlist& operator=(subforwardlist&& other) { // move assignment constructor
         if (this != &other) {
             while (begin != nullptr) {
@@ -90,6 +96,9 @@ void push_back(const T& data) {
         curr->next = new_node;
     }
 }
+
+// Из методов ниже можно вынести функцию, которая считает указатель на заданный по индексу элемент
+// Это сильно упросит код, потому что она почти везде ниже фактически используется (но в терминах повторяющегося одного и того же куска кода)
 
 T pop_back() {
     if (begin == nullptr) {

@@ -15,6 +15,9 @@ subvector(const subvector& other): top(other.top), capacity(other.capacity) {
 }
 };
 
+// 1) забыт return statement;
+// 2) Здесь фактически переписана логика деструктора + консруктора копирования
+// Посмотри идеому copy&swap для оператора присваивания.
 subvector& operator=(const subvector& other) {
     if (this != &other) {
         delete[] mas;
@@ -33,6 +36,9 @@ subvector(subvector&& other): mas(other.mas), capacity(other.capacity), top(othe
     other.mas = nullptr
 }
 
+
+// Удаление можно оставить деструктору того объекта, который мувается.
+// Это можно написать элегантнее через функцию swap
 subvector& operator=(subvector&& other) {
     if (this != other) {
         delete[] mas;
@@ -46,6 +52,7 @@ subvector& operator=(subvector&& other) {
     return *this;
 }
 
+// Тот же самый код, что и в resize, нужно здесь его переиспользовать, чтобы не плодить ошибки типа "тут исправил -- там забыл".
 bool push_back(const T& d) {
     if (top >= capacity) {
         unsigned int new_capacity = (capacity == 0) ? 1 : capacity * 2;
@@ -93,7 +100,7 @@ bool resize(unsigned int new_capacity) {
     mas = new_mas;
     capacity = new_capacity;
     top = elements_to_copy;
-    
+    // строки 89-92 и 102 можно записать в одну с использованием тернарного оператора 
     return true;
 };
 
